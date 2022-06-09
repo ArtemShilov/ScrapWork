@@ -211,3 +211,4 @@ ENV/
 # mkdocs documentation
 /site
 .db.sqlite3
+.commands.txt
