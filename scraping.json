@@ -1,0 +1,68 @@
+[
+  {
+    "model": "scraping.city",
+    "pk": 1,
+    "fields": {
+      "name": "Чернигов",
+      "slug": "chernigov"
+    }
+  },
+  {
+    "model": "scraping.city",
+    "pk": 2,
+    "fields": {
+      "name": "Киев",
+      "slug": "kiev"
+    }
+  },
+  {
+    "model": "scraping.city",
+    "pk": 3,
+    "fields": {
+      "name": "Одесса",
+      "slug": "odessа"
+    }
+  },
+  {
+    "model": "scraping.language",
+    "pk": 1,
+    "fields": {
+      "name": "Python",
+      "slug": "python"
+    }
+  },
+  {
+    "model": "scraping.language",
+    "pk": 3,
+    "fields": {
+      "name": "JavaScript",
+      "slug": "javascript"
+    }
+  },
+  {
+    "model": "scraping.vacancy",
+    "pk": 1,
+    "fields": {
+      "url": "https://www.work.ua/ru/jobs/4828993/",
+      "title": "Python developer",
+      "company": "Apriorit",
+      "description": "Apriorit is a leader in software development with more than 20 years of experience, is looking forPython Developer. We cooperate with software vendors who are the major players in the markets of the corporate security, data protection and analysis, virtualization, cloud computing, and system low-level solutions.\r\n\r\nYou will be working with security solutions enhance threat visibility, automate threat detection, and accelerate threat response, and remediation. Requirements:\r\n\r\n3+ years experience as Python Developer\r\nStrong knowledge of algorithms and data structures\r\nExperience with database (Postgresql)\r\nCompetence with Linux\r\nBS or higher in computer science or a related field;\r\nEnglish — Intermediate level",
+      "city": 2,
+      "language": 1,
+      "timestamp": "2022-06-09"
+    }
+  },
+  {
+    "model": "scraping.vacancy",
+    "pk": 2,
+    "fields": {
+      "url": "https://rabota.ua/ua/company766643/vacancy8705611",
+      "title": "Middle+ JavaScript Developer",
+      "company": "Innovation Group",
+      "description": "Гнучкий графік;\r\nЩорічний perfomance rewiev;\r\n20 днів на відпустку, 5 day-offs, 15 лікарняних, вихідні на усі державні свята;\r\nПодарунки на день народження, бонуси на особисті родинні свята та ще багато приємностей;\r\nМедична страховка від компанії UNIQA;\r\nУчасть у конференціях та профільних навчальних заходах коштом компанії;\r\nПерсональна нова робоча техніка;\r\nЗручна виплата заробітної плати;\r\nКорпоративні знижки та особистий мерч;\r\nПостійна підтримка зв’язку з усіх необхідних питань.",
+      "city": 3,
+      "language": 3,
+      "timestamp": "2022-06-11"
+    }
+  }
+]
