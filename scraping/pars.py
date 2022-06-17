@@ -7,6 +7,36 @@ __all_ = ('work_ua', 'jobitt_scrap')
 headers = {}
 
 
+def jobs_ua(url):
+    jobs = []
+    errors = []
+    response = requests.get(url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'html.parser')
+        main_ul = soup.find('div', {'class': 'b-content'})
+        if main_ul:
+            title = soup.find('a', {'class': 'b-vacancy__top__title js-item_title'}).get_text()
+            href = soup.find('a', {'class': 'b-vacancy__top__title js-item_title'})['href']
+            content = soup.find('a', {'class': 'b-vacancy__top__title js-item_title'})['title']
+            company = soup.find('span', {'class': 'link__hidden'}).get_text()
+
+            jobs.append(
+                {'title': title,
+                 'url': href,
+                 'description': content,
+                 'company': company
+                 }
+            )
+
+        else:
+            errors.append({'url': url, 'title': "Div does not exists"})
+
+    else:
+        errors.append({'url': url, 'title': "Page do not response"})
+
+    return jobs, errors
+
+
 def work_ua(url):
     jobs = []
     errors = []
@@ -130,4 +160,9 @@ if __name__ == '__main__':
 # handler = codecs.open('work_ua.csv', 'w', 'utf-8')
 # handler.write(str(jobs))
 # handler.close()
-    pass
+
+    url = 'https://jobs.ua/vacancy/kiev/rabota-python'
+    jobs, errors = jobs_ua(url)
+    handler = codecs.open('jobs.txt', 'w', 'utf-8')
+    handler.write(str(jobs))
+    handler.close()

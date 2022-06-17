@@ -1,0 +1,3 @@
+[{'title': 'QA Automation Engineer (Python)',
+'url': 'https://jobs.ua/job-qa-automation-engineer-python-3797845', 'description': 'Робота QA Automation Engineer (Python)',
+'company': 'IT Recruitment Solutions (ITRS.ua) ®'}]
