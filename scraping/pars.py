@@ -2,6 +2,8 @@ import requests
 import codecs
 from bs4 import BeautifulSoup
 
+__all_ = ('work_ua', 'jobitt_scrap')
+
 headers = {}
 
 
@@ -79,16 +81,53 @@ def jobitt_scrap(url):
     return jobs, errors
 
 
+# def dou_ua(url):
+#     jobs = []
+#     errors = []
+#     response = requests.get(url)
+#
+#     if response.status_code == 200:
+#         soup = BeautifulSoup(response.content, 'html.parser')
+#         main_div = soup.find('div', id='vacancyListId')
+#         if main_div:
+#             li_lst = main_div.find_all('li', attrs={'class': 'l-vacancy'})
+#             for li in li_lst:
+#                 title = li.find('div', attrs={'class': 'title'})
+#                 href = title.a['href']
+#                 cont = li.find('div', attrs={'class': 'sh-info'})
+#                 content = cont.text
+#                 company = 'No name'
+#                 a = title.find('a', attrs={'class': 'company'})
+#                 if a:
+#                     company = a.text
+#                 jobs.append(
+#                     {
+#                         'title': title.text,
+#                         'url': href,
+#                         'description': content,
+#                         'company': company
+#                     }
+#                 )
+#         else:
+#             errors.append({'url': url, 'title': "Div does not exists"})
+#
+#     else:
+#         errors.append({'url': url, 'title': "Page do not response"})
+#
+#     return jobs, errors
+
+
 if __name__ == '__main__':
     # url = 'https://www.work.ua/ru/jobs-kyiv-python/'
-    url = 'https://jobitt.com/ru/job-openings?gclid=Cj0KCQjwwJuVBhCAARIsAOPwGAT3T3ntveS3nFWR8sM6k_3PSlhLiE_xazlzWcMsqzzRz92CEVTPtRUaAnROEALw_wcB&search=Python&page=1&city=265'
-    # jobs = rabota_ua(url)
-    jobs, errors = jobitt_scrap(url)
-    handler = codecs.open('jobitt_com.txt', 'w', 'utf-8')
-    handler.write(str(jobs))
-    handler.close()
+    # url = 'https://jobitt.com/ru/job-openings?gclid=Cj0KCQjwwJuVBhCAARIsAOPwGAT3T3ntveS3nFWR8sM6k_3PSlhLiE_xazlzWcMsqzzRz92CEVTPtRUaAnROEALw_wcB&search=Python&page=1&city=265'
+    # jobs = work_ua(url)
+    # jobs, errors = jobitt_scrap(url)
+    # handler = codecs.open('rf.txt', 'w', 'utf-8')
+    # handler.write(str(jobs))
+    # handler.close()
 
 
 # handler = codecs.open('work_ua.csv', 'w', 'utf-8')
 # handler.write(str(jobs))
 # handler.close()
+    pass
