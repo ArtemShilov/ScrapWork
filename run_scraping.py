@@ -3,9 +3,8 @@ import os
 import sys
 
 
-
 proj = os.path.dirname(os.path.abspath('manage.py'))
-sys.path.append('path_to+my_project/')
+sys.path.append(proj)
 os.environ['DJANGO_SETTINGS_MODULE'] = 'ScrapWork.settings'
 
 import django
@@ -17,7 +16,8 @@ from scraping.models import Vacancy, City, Language, Errors
 
 parsers = (
     (work_ua, 'https://www.work.ua/ru/jobs-kyiv-python/'),
-    (jobitt_scrap, 'https://jobitt.com/ru/job-openings?gclid=Cj0KCQjwwJuVBhCAARIsAOPwGAT3T3ntveS3nFWR8sM6k_3PSlhLiE_xazlzWcMsqzzRz92CEVTPtRUaAnROEALw_wcB&search=Python&page=1&city=265')
+    (jobitt_scrap, 'https://jobitt.com/ru/job-openings?gclid=Cj0KCQjwwJuVBhCAARIsAOPwGAT3T3ntveS3nFWR8sM6k_3PSlhLiE_xazlzWcMsqzzRz92CEVTPtRUaAnROEALw_wcB&search=Python&page=1&city=265'),
+    (jobs_ua, 'https://jobs.ua/vacancy/kiev/rabota-python'),
            )
 
 city = City.objects.filter(slug='kiev').first()

@@ -2,7 +2,7 @@ import requests
 import codecs
 from bs4 import BeautifulSoup
 
-__all_ = ('work_ua', 'jobitt_scrap')
+__all_ = ('work_ua', 'jobitt_scrap', 'jobs_ua')
 
 headers = {}
 
@@ -11,22 +11,30 @@ def jobs_ua(url):
     jobs = []
     errors = []
     response = requests.get(url)
+
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
-        main_ul = soup.find('div', {'class': 'b-content'})
-        if main_ul:
-            title = soup.find('a', {'class': 'b-vacancy__top__title js-item_title'}).get_text()
-            href = soup.find('a', {'class': 'b-vacancy__top__title js-item_title'})['href']
-            content = soup.find('a', {'class': 'b-vacancy__top__title js-item_title'})['title']
-            company = soup.find('span', {'class': 'link__hidden'}).get_text()
+        main_div = soup.find('div', {'class': 'b-content'})
+        if main_div:
+            li_lst = soup.find_all('li', attrs={'class': 'b-vacancy__item js-item_list'})
+            for li in li_lst:
+                title = li.find('a', {'class': 'b-vacancy__top__title js-item_title'}).get_text()
+                href = li.find('a', {'class': 'b-vacancy__top__title js-item_title'}).get('href')
+                company = li.find('span', {'class': 'link__hidden'}).get_text()
+                content = ''
+                logo = li.find('img')
+                if logo:
+                    content = logo['alt']
+                else:
+                    content = 'More information at the link'
 
-            jobs.append(
-                {'title': title,
-                 'url': href,
-                 'description': content,
-                 'company': company
-                 }
-            )
+                jobs.append(
+                    {'title': title,
+                     'url': href,
+                     'description': content,
+                     'company': company
+                     }
+                )
 
         else:
             errors.append({'url': url, 'title': "Div does not exists"})
@@ -56,6 +64,9 @@ def work_ua(url):
                 logo = div.find('img')
                 if logo:
                     company = logo['alt']
+                else:
+                    company = div.find('div', {'class': 'add-top-xs'})
+                    company = company.b.text
 
                 jobs.append(
                     {
@@ -151,8 +162,8 @@ if __name__ == '__main__':
     # url = 'https://www.work.ua/ru/jobs-kyiv-python/'
     # url = 'https://jobitt.com/ru/job-openings?gclid=Cj0KCQjwwJuVBhCAARIsAOPwGAT3T3ntveS3nFWR8sM6k_3PSlhLiE_xazlzWcMsqzzRz92CEVTPtRUaAnROEALw_wcB&search=Python&page=1&city=265'
     # jobs = work_ua(url)
-    # jobs, errors = jobitt_scrap(url)
-    # handler = codecs.open('rf.txt', 'w', 'utf-8')
+    # jobs, errors = work_ua(url)
+    # handler = codecs.open('work_ua.txt', 'w', 'utf-8')
     # handler.write(str(jobs))
     # handler.close()
 
@@ -161,8 +172,9 @@ if __name__ == '__main__':
 # handler.write(str(jobs))
 # handler.close()
 
-    url = 'https://jobs.ua/vacancy/kiev/rabota-python'
-    jobs, errors = jobs_ua(url)
-    handler = codecs.open('jobs.txt', 'w', 'utf-8')
-    handler.write(str(jobs))
-    handler.close()
+    # url = 'https://jobs.ua/vacancy/kiev/rabota-python'
+    # jobs, errors = jobs_ua(url)
+    # handler = codecs.open('jobs.txt', 'w', 'utf-8')
+    # handler.write(str(jobs))
+    # handler.close()
+    pass
