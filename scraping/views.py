@@ -5,6 +5,11 @@ from .forms import FindForm
 
 def home_view(request):
     form = FindForm()
+    return render(request, 'home.html', {'form': form})
+
+
+def list_view(request):
+    form = FindForm()
     city = request.GET.get('city')
     language = request.GET.get('language')
     qs = []
@@ -15,4 +20,4 @@ def home_view(request):
         if language:
             _filter['language__slug'] = language
         qs = Vacancy.objects.filter(**_filter)
-    return render(request, 'home.html', {'object_list': qs, 'form': form})
+    return render(request, 'list.html', {'object_list': qs, 'form': form})

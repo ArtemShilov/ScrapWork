@@ -3,22 +3,13 @@
 {% block title %}Work_Scrap{% endblock %}
 
 {% block content %}
-    {% for obj in object_list %}
-        <div class="card my-4">
-            <h5 class="card-header"><a href="{{ obj.url }}">{{ obj.title }}</a></h5>
-            <div class="card-body">
-                <h4>{{ obj.company }}</h4>
-                <p class="card-text">{{ obj.description }}</p>
-                <p>{{ obj.city.name }} | {{ obj.language.name }} | <small>{{ obj.timestamp|date:"d-m-Y" }}</small></p>
-            </div>
-        </div>
-        {% empty %}
-        <h3>По Вашему запросу, ничeго не найдено :-( </h3>
-    {% endfor %}
-
 <div class="row">
+    <div class="col"><h2>Сервис по збору и рассылке вакансий</h2></div>
+</div>
     <div class="col-md-6 mx-auto">
-        <form method="GET" action="">
+        <h2>Для просмотра доступных вакансий, заполните форму, одну из полей!!!</h2>
+        <p></p>
+        <form method="GET" action="{% url 'list' %}">
             <div class="form-group">
                   {{ form.as_p }}
             </div>
