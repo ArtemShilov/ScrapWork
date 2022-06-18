@@ -7,117 +7,123 @@ __all_ = ('work_ua', 'jobitt_scrap', 'jobs_ua')
 headers = {}
 
 
-def jobs_ua(url):
+def jobs_ua(url, city=None, language=None):
     jobs = []
     errors = []
-    response = requests.get(url)
+    if url:
+        response = requests.get(url)
 
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, 'html.parser')
-        main_div = soup.find('div', {'class': 'b-content'})
-        if main_div:
-            li_lst = soup.find_all('li', attrs={'class': 'b-vacancy__item js-item_list'})
-            for li in li_lst:
-                title = li.find('a', {'class': 'b-vacancy__top__title js-item_title'}).get_text()
-                href = li.find('a', {'class': 'b-vacancy__top__title js-item_title'}).get('href')
-                company = li.find('span', {'class': 'link__hidden'}).get_text()
-                content = ''
-                logo = li.find('img')
-                if logo:
-                    content = logo['alt']
-                else:
-                    content = 'More information at the link'
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            main_div = soup.find('div', {'class': 'b-content'})
+            if main_div:
+                li_lst = soup.find_all('li', attrs={'class': 'b-vacancy__item js-item_list'})
+                for li in li_lst:
+                    title = li.find('a', {'class': 'b-vacancy__top__title js-item_title'}).get_text()
+                    href = li.find('a', {'class': 'b-vacancy__top__title js-item_title'}).get('href')
+                    company = li.find('span', {'class': 'link__hidden'}).get_text()
+                    content = ''
+                    logo = li.find('img')
+                    if logo:
+                        content = logo['alt']
+                    else:
+                        content = 'More information at the link'
 
-                jobs.append(
-                    {'title': title,
-                     'url': href,
-                     'description': content,
-                     'company': company
-                     }
-                )
+                    jobs.append(
+                        {'title': title,
+                         'url': href,
+                         'description': content,
+                         'company': company,
+                         'city_id': city, 'language_id': language,
+                         }
+                    )
+
+            else:
+                errors.append({'url': url, 'title': "Div does not exists"})
 
         else:
-            errors.append({'url': url, 'title': "Div does not exists"})
-
-    else:
-        errors.append({'url': url, 'title': "Page do not response"})
+            errors.append({'url': url, 'title': "Page do not response"})
 
     return jobs, errors
 
 
-def work_ua(url):
+def work_ua(url, city=None, language=None):
     jobs = []
     errors = []
     domain = 'https://www.work.ua'
-    response = requests.get(url)
+    if url:
+        response = requests.get(url)
 
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, 'html.parser')
-        main_div = soup.find('div', {'id': 'pjax-job-list'})
-        if main_div:
-            div_lst = soup.find_all('div', attrs={'class': 'job-link'})
-            for div in div_lst:
-                title = div.find('h2')
-                href = title.a['href']
-                content = div.p.text
-                company = 'No name'
-                logo = div.find('img')
-                if logo:
-                    company = logo['alt']
-                else:
-                    company = div.find('div', {'class': 'add-top-xs'})
-                    company = company.b.text
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            main_div = soup.find('div', {'id': 'pjax-job-list'})
+            if main_div:
+                div_lst = soup.find_all('div', attrs={'class': 'job-link'})
+                for div in div_lst:
+                    title = div.find('h2')
+                    href = title.a['href']
+                    content = div.p.text
+                    company = 'No name'
+                    logo = div.find('img')
+                    if logo:
+                        company = logo['alt']
+                    else:
+                        company = div.find('div', {'class': 'add-top-xs'})
+                        company = company.b.text
 
-                jobs.append(
-                    {
-                        'title': title.text,
-                        'url': domain + href,
-                        'description': content,
-                        'company': company
-                    }
-                )
+                    jobs.append(
+                        {
+                            'title': title.text,
+                            'url': domain + href,
+                            'description': content,
+                            'company': company,
+                            'city_id': city, 'language_id': language,
+                        }
+                    )
+            else:
+                errors.append({'url': url, 'title': "Div does not exists"})
+
         else:
-            errors.append({'url': url, 'title': "Div does not exists"})
-
-    else:
-        errors.append({'url': url, 'title': "Page do not response"})
+            errors.append({'url': url, 'title': "Page do not response"})
 
     return jobs, errors
 
 
-def jobitt_scrap(url):
+def jobitt_scrap(url, city=None, language=None):
     jobs = []
     errors = []
     domain = 'https://jobitt.com'
-    response = requests.get(url)
+    if url:
+        response = requests.get(url)
 
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, 'html.parser')
-        main_div = soup.find('div', {'class': 'list-vacancy__content__wrapper__list-vacancy'})
-        if main_div:
-            div_lst = soup.find_all('div', attrs={'class': 'vacancy'})
-            for div in div_lst:
-                title = div.find('a')
-                href = title['href']
-                content = div.find('div', attrs={'class': 'vacancy-description'})
-                company = 'No name'
-                logo = div.find('img')
-                if logo:
-                    company = logo['alt']
+        if response.status_code == 200:
+            soup = BeautifulSoup(response.content, 'html.parser')
+            main_div = soup.find('div', {'class': 'list-vacancy__content__wrapper__list-vacancy'})
+            if main_div:
+                div_lst = soup.find_all('div', attrs={'class': 'vacancy'})
+                for div in div_lst:
+                    title = div.find('a')
+                    href = title['href']
+                    content = div.find('div', attrs={'class': 'vacancy-description'})
+                    company = 'No name'
+                    logo = div.find('img')
+                    if logo:
+                        company = logo['alt']
 
-                jobs.append(
-                    {
-                        'title': title.text,
-                        'url': domain + href,
-                        'description': content.text,
-                        'company': company
-                    }
-                )
+                    jobs.append(
+                        {
+                            'title': title.text,
+                            'url': domain + href,
+                            'description': content.text,
+                            'company': company,
+                            'city_id': city, 'language_id': language,
+                        }
+                    )
+            else:
+                errors.append({'url': url, 'title': "Div does not exists"})
+
         else:
-            errors.append({'url': url, 'title': "Div does not exists"})
-
-    else:
-        errors.append({'url': url, 'title': "Page do not response"})
+            errors.append({'url': url, 'title': "Page do not response"})
 
     return jobs, errors
 

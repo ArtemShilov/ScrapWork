@@ -1,3 +1,4 @@
+import asyncio
 import codecs
 import os
 import sys
@@ -18,9 +19,9 @@ from scraping.models import Vacancy, City, Language, Errors, Url
 User = get_user_model()
 
 parsers = (
-    (work_ua, 'https://www.work.ua/ru/jobs-kyiv-python/'),
-    (jobitt_scrap, 'https://jobitt.com/ru/job-openings?gclid=Cj0KCQjwwJuVBhCAARIsAOPwGAT3T3ntveS3nFWR8sM6k_3PSlhLiE_xazlzWcMsqzzRz92CEVTPtRUaAnROEALw_wcB&search=Python&page=1&city=265'),
-    (jobs_ua, 'https://jobs.ua/vacancy/kiev/rabota-python'),
+    (work_ua, 'work'),
+    (jobitt_scrap, 'rabota'),
+    (jobs_ua, 'jobs'),
            )
 
 
@@ -42,20 +43,41 @@ def get_urls(_settings):
         urls.append(tmp)
     return urls
 
-q = get_settings()
-w = get_urls(q)
 
-city = City.objects.filter(slug='kiev').first()
-language = Language.objects.filter(slug='python').first()
+# city = City.objects.filter(slug='kiev').first()
+# language = Language.objects.filter(slug='python').first()
 
 jobs, errors = [], []
-for func, url in parsers:
-    j, e = func(url)
-    jobs += j
-    errors += e
+
+
+async def main(value):
+    func, url, city, language = value
+    job, err = await loop.run_in_executor(None, func, url, city, language)
+    errors.extend(err)
+    jobs.extend(job)
+
+
+settings = get_settings()
+url_list = get_urls(settings)
+loop = asyncio.get_event_loop()
+
+tmp_task = [
+            (func, data.get(key), data['city'], data['language'])
+            for data in url_list
+            for func, key in parsers
+            ]
+tasks = asyncio.wait([loop.create_task(main(f)) for f in tmp_task])
+
+for data in url_list:
+
+    for func, key in parsers:
+        url = data['url_data'][key]
+        j, e = func(url, city=data['city'], language=data['language'])
+        jobs += j
+        errors += e
 
 for job in jobs:
-    vacancy = Vacancy(**job, city=city, language=language)
+    vacancy = Vacancy(**job)
     try:
         vacancy.save()
     except DatabaseError:
