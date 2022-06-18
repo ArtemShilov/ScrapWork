@@ -2,6 +2,10 @@ from django.db import models
 from scraping.utils import from_cyrillic_to_eng
 
 
+def default_urls():
+    return {'work': '', 'rabota': '', 'jobs': ''}
+
+
 class City(models.Model):
 
     name = models.CharField(max_length=30, verbose_name='Название населенного пункта', unique=True)
@@ -66,3 +70,12 @@ class Errors(models.Model):
 
     def __str__(self):
         return self.timestamp
+
+
+class Url(models.Model):
+    city = models.ForeignKey('City', on_delete=models.CASCADE, verbose_name='Город')
+    language = models.ForeignKey('Language', on_delete=models.CASCADE, verbose_name='Язык программирования')
+    url_data = models.JSONField(default=default_urls)
+
+    class Meta:
+        unique_together = ('city', 'language')
